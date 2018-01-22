@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = initialize.cpp Game.cpp TextureManager.cpp GameObject.cpp Map.cpp ECS/ECS.hpp ECS/PositionComponent.hpp
+OBJS = initialize.cpp Game.cpp TextureManager.cpp GameObject.cpp Vector2D.cpp Map.cpp ECS/ECS.hpp ECS/PositionComponent.hpp
 
 #CC specifies which compiler we're using
 CC = g++ -std=c++11
