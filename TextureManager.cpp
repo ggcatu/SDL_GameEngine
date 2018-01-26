@@ -11,3 +11,11 @@ SDL_Texture * TextureManager::load_texture(const char* path){
 void TextureManager::draw(SDL_Texture * texture, SDL_Rect src, SDL_Rect dst){
 	SDL_RenderCopy(Game::renderer, texture, &src, &dst);
 }
+
+void TextureManager::draw_rectangle(SDL_Rect rect){
+    SDL_SetRenderDrawColor(Game::renderer, 0, 0, 255, 255);
+
+    SDL_RenderFillRect(Game::renderer, &rect);
+
+    SDL_RenderPresent(Game::renderer);
+}

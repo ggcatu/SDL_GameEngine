@@ -4,35 +4,37 @@
 #include "TextureManager.hpp"
 #include "GameObject.hpp"
 #include "Map.hpp"
-
+#include "Collision.hpp"
 #include "ECS/Components.hpp"
 
 using namespace std;
 
 
 Map * map = NULL;
-Manager manager; 
+Manager manager;
 Entity& newPlayer = manager.add_entity();
+Entity& rock = manager.add_entity();
 
 Game::Game(){};
 Game::~Game(){};
 
+SDL_Event Game::event;
 SDL_Renderer* Game::renderer = NULL;
 
 void Game::init(const char * title, int x, int y, int width, int height, bool fullscreen){
 	int flags = 0 ;
-	if ( fullscreen ){ 
+	if ( fullscreen ){
 		flags = SDL_WINDOW_FULLSCREEN;
 	}
 
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == 0 ){
-		cout << "Correct initialization." << endl; 
+		cout << "Correct initialization." << endl;
 
 		window = SDL_CreateWindow(title, x, y, width, height, flags);
 		if (window){ cout << "Windows created correctly." << endl;}
 
 		renderer = SDL_CreateRenderer(window, -1, 0);
-		if (renderer){ 
+		if (renderer){
 			cout << "Renderer created correctly." << endl;
 			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		}
@@ -40,8 +42,13 @@ void Game::init(const char * title, int x, int y, int width, int height, bool fu
 
 		map = new Map();
 
-		newPlayer.add_component<PositionComponent>();
-		newPlayer.add_component<SpriteComponent>("assets/player.png");
+		newPlayer.add_component<PositionComponent>(0,0, 32, 32);
+		newPlayer.add_component<SpriteComponent>("assets/player.png", 2, 240, 260);
+		newPlayer.add_component<InputComponent>();
+		newPlayer.add_component<ColliderComponent>(false);
+
+		rock.add_component<PositionComponent>(160,160);
+		rock.add_component<ColliderComponent>(40,40,true);
 
 	} else {
 		is_running = false;
@@ -49,7 +56,6 @@ void Game::init(const char * title, int x, int y, int width, int height, bool fu
 }
 
 void Game::handle_events(){
-	SDL_Event event;
 	SDL_PollEvent(&event);
 	switch(event.type){
 		case SDL_QUIT:
@@ -64,7 +70,12 @@ int cnt = 1;
 void Game::update(){
 	manager.refresh();
 	manager.update();
-	cout << newPlayer.get_component<PositionComponent>().x() << " " << newPlayer.get_component<PositionComponent>().y() << endl;
+
+	// cout << newPlayer.get_component<PositionComponent>().x() << " " << newPlayer.get_component<PositionComponent>().y() << endl;
+
+	if ( Collision::AABB(newPlayer.get_component<ColliderComponent>().collider,
+						 rock.get_component<ColliderComponent>().collider))
+		std::cout << "Colision detectada \n";
 }
 
 void Game::render(){

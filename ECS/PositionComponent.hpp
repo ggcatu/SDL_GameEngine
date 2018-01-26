@@ -1,15 +1,40 @@
 #pragma once
 #include "ECS.hpp"
+#include "../Vector2D.hpp"
 
-class PositionComponent: public Component
-{
+#define DEFAULT_VALUE 32
+
+class PositionComponent: public Component {
 public:
-	void init() override { _x = 0; _y = 0;}
-	void set_pos(int xpos, int ypos){ _x = xpos; _y = ypos; };
-	int x() const { return _x; };
-	int y() const { return _y; };
-	void update() override {_x++; _y++;};
+    PositionComponent(){
+        position.x = 0;
+        position.y = 0;
+        this->width = DEFAULT_VALUE;
+        this->height = DEFAULT_VALUE;
+    };
+
+    PositionComponent(int x, int y){
+        position.x = x;
+        position.y = y;
+        this->width = DEFAULT_VALUE;
+        this->height = DEFAULT_VALUE;
+    };
+
+    PositionComponent(int x, int y, int width, int height){
+        position.x = x;
+        position.y = y;
+        this->width = width;
+        this->height = height;
+    };
+	void init() override {}
+    void set_pos(int xpos, int ypos){ position.x = xpos, position.y = ypos; };
+	void set_vel(int xpos, int ypos){ velocity.x = xpos, velocity.y = ypos; };
+	int x() const { return position.x; };
+	int y() const { return position.y; };
+	void update() override {position += velocity;};
+    Vector2D velocity;
+    int width;
+    int height;
 private:
-	int _x;
-	int _y;
+    Vector2D position;
 };

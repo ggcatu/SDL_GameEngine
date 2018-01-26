@@ -3,3 +3,5 @@
 #include "ECS.hpp"
 #include "PositionComponent.hpp"
 #include "SpriteComponent.hpp"
+#include "InputComponent.hpp"
+#include "ColliderComponent.hpp"

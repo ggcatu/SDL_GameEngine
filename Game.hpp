@@ -15,8 +15,9 @@ public:
 	void clean();
 	bool running() { return is_running; }
 	static SDL_Renderer * renderer;
+	static SDL_Event event;
 
 private:
-	SDL_Window * window; 
+	SDL_Window * window;
 	bool is_running;
 };
